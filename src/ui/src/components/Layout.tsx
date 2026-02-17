@@ -1,13 +1,21 @@
 import React from 'react';
 import Navbar from './Navbar';
+import WhatsAppButton from './WhatsAppButton';
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: '100vh' }}>
+    <div style={{ display: 'flex', minHeight: '100vh' }}>
       <Navbar />
-      <main style={{ maxWidth: 1200, margin: '0 auto', padding: '24px 16px' }}>
+      <main style={{
+        flex: 1,
+        marginLeft: 260,
+        padding: '32px 40px',
+        maxWidth: 1400,
+        minHeight: '100vh',
+      }}>
         {children}
       </main>
+      <WhatsAppButton />
     </div>
   );
 }

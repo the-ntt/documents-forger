@@ -2,10 +2,10 @@ import { useState, useEffect, useCallback, useRef } from 'react';
 import { api, AppLog } from '../api/client';
 
 const LEVEL_COLORS: Record<string, { bg: string; text: string; badge: string }> = {
-  error: { bg: '#f8d7da', text: '#721c24', badge: '#d9534f' },
-  warn: { bg: '#fff3cd', text: '#856404', badge: '#f0ad4e' },
-  info: { bg: '#d1ecf1', text: '#0c5460', badge: '#17a2b8' },
-  debug: { bg: '#e2e3e5', text: '#383d41', badge: '#6c757d' },
+  error: { bg: 'var(--color-danger-soft)', text: 'var(--color-danger)', badge: 'var(--color-danger)' },
+  warn: { bg: 'var(--color-warning-soft)', text: '#92400e', badge: 'var(--color-warning)' },
+  info: { bg: 'var(--color-info-soft)', text: 'var(--color-info)', badge: 'var(--color-info)' },
+  debug: { bg: 'var(--color-bg)', text: 'var(--color-text-secondary)', badge: 'var(--color-text-muted)' },
 };
 
 const LEVELS = ['all', 'error', 'warn', 'info', 'debug'] as const;
@@ -75,25 +75,40 @@ export default function Logs() {
   };
 
   return (
-    <div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-        <h1 style={{ margin: 0 }}>Logs</h1>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <label style={{ fontSize: 13, color: '#666', display: 'flex', alignItems: 'center', gap: 4 }}>
+    <div className="fade-in">
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 24 }}>
+        <div>
+          <h1 style={{ fontSize: 28, marginBottom: 6 }}>System Logs</h1>
+          <p style={{ color: 'var(--color-text-secondary)', fontSize: 14, margin: 0 }}>
+            Monitor application activity, errors, and AI processing in real-time.
+          </p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <label style={{
+            fontSize: 12, color: 'var(--color-text-secondary)', display: 'flex', alignItems: 'center', gap: 6,
+            cursor: 'pointer',
+          }}>
             <input
               type="checkbox"
               checked={autoRefresh}
               onChange={(e) => setAutoRefresh(e.target.checked)}
+              style={{ accentColor: 'var(--color-accent)' }}
             />
             Auto-refresh
           </label>
-          <span style={{ fontSize: 12, color: '#999' }}>{total} total</span>
+          <span style={{
+            fontSize: 11, color: 'var(--color-text-muted)',
+            background: 'var(--color-bg)', padding: '4px 10px',
+            borderRadius: 20, fontWeight: 500,
+          }}>
+            {total} total
+          </span>
         </div>
       </div>
 
       {/* Filters */}
       <div style={{
-        display: 'flex', gap: 8, marginBottom: 16, alignItems: 'center',
+        display: 'flex', gap: 8, marginBottom: 20, alignItems: 'center',
         flexWrap: 'wrap',
       }}>
         {LEVELS.map(l => (
@@ -101,37 +116,43 @@ export default function Logs() {
             key={l}
             onClick={() => { setLevel(l); setPage(0); }}
             style={{
-              padding: '4px 12px',
-              border: level === l ? '2px solid #1a1a2e' : '1px solid #ddd',
-              borderRadius: 16,
-              background: level === l ? '#1a1a2e' : '#fff',
-              color: level === l ? '#fff' : (l !== 'all' ? LEVEL_COLORS[l]?.badge || '#333' : '#333'),
+              padding: '5px 14px',
+              border: level === l ? '1.5px solid var(--color-accent)' : '1px solid var(--color-border)',
+              borderRadius: 20,
+              background: level === l ? 'var(--color-accent-soft)' : 'var(--color-surface)',
+              color: level === l ? 'var(--color-accent)' : (l !== 'all' ? LEVEL_COLORS[l]?.badge || 'var(--color-text-secondary)' : 'var(--color-text-secondary)'),
               cursor: 'pointer',
-              fontSize: 13,
+              fontSize: 12,
               fontWeight: level === l ? 600 : 400,
               textTransform: 'capitalize',
+              transition: 'all var(--transition)',
             }}
           >
             {l}
           </button>
         ))}
 
-        <div style={{ flex: 1, minWidth: 200, display: 'flex', gap: 4 }}>
+        <div style={{ flex: 1, minWidth: 200, display: 'flex', gap: 6 }}>
           <input
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
             onKeyDown={handleKeyDown}
             placeholder="Search logs..."
             style={{
-              flex: 1, padding: '6px 12px', border: '1px solid #ddd',
-              borderRadius: 4, fontSize: 13,
+              flex: 1, padding: '7px 14px', border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-md)', fontSize: 13, outline: 'none',
+              background: 'var(--color-surface)', transition: 'border-color var(--transition)',
             }}
+            onFocus={e => e.target.style.borderColor = 'var(--color-accent)'}
+            onBlur={e => e.target.style.borderColor = 'var(--color-border)'}
           />
           <button
             onClick={handleSearch}
             style={{
-              padding: '6px 12px', border: '1px solid #ddd', borderRadius: 4,
-              background: '#f8f9fa', cursor: 'pointer', fontSize: 13,
+              padding: '7px 14px', border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-surface)', cursor: 'pointer', fontSize: 12,
+              transition: 'all var(--transition)',
             }}
           >
             Search
@@ -140,8 +161,10 @@ export default function Logs() {
             <button
               onClick={() => { setSearchInput(''); setSearch(''); setPage(0); }}
               style={{
-                padding: '6px 8px', border: '1px solid #ddd', borderRadius: 4,
-                background: '#f8f9fa', cursor: 'pointer', fontSize: 13, color: '#d9534f',
+                padding: '7px 10px', border: '1px solid var(--color-border)',
+                borderRadius: 'var(--radius-md)',
+                background: 'var(--color-surface)', cursor: 'pointer', fontSize: 12,
+                color: 'var(--color-danger)',
               }}
             >
               Clear
@@ -152,29 +175,44 @@ export default function Logs() {
 
       {/* Log entries */}
       {loading && logs.length === 0 ? (
-        <p style={{ color: '#999' }}>Loading logs...</p>
+        <div style={{ textAlign: 'center', padding: 40 }}>
+          <div style={{
+            width: 24, height: 24, border: '2px solid var(--color-border)',
+            borderTopColor: 'var(--color-accent)', borderRadius: '50%',
+            animation: 'spin 0.8s linear infinite', margin: '0 auto',
+          }} />
+        </div>
       ) : logs.length === 0 ? (
-        <p style={{ color: '#999' }}>No logs found.</p>
+        <div style={{
+          textAlign: 'center', padding: '40px 20px',
+          background: 'var(--color-surface)', borderRadius: 'var(--radius-lg)',
+          border: '1px solid var(--color-border)',
+        }}>
+          <p style={{ color: 'var(--color-text-muted)', fontSize: 13 }}>No logs found.</p>
+        </div>
       ) : (
         <div style={{
-          fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',
+          fontFamily: 'var(--font-mono)',
           fontSize: 12,
-          border: '1px solid #ddd',
-          borderRadius: 4,
+          border: '1px solid var(--color-border)',
+          borderRadius: 'var(--radius-lg)',
           overflow: 'hidden',
+          background: 'var(--color-surface)',
+          boxShadow: 'var(--shadow-sm)',
         }}>
           {/* Header */}
           <div style={{
             display: 'grid',
             gridTemplateColumns: '80px 60px 1fr',
-            padding: '6px 12px',
-            background: '#f8f9fa',
-            borderBottom: '1px solid #ddd',
+            padding: '8px 16px',
+            background: 'var(--color-bg)',
+            borderBottom: '1px solid var(--color-border)',
             fontWeight: 600,
-            fontSize: 11,
-            color: '#666',
+            fontSize: 10,
+            color: 'var(--color-text-muted)',
             textTransform: 'uppercase',
-            letterSpacing: '0.5px',
+            letterSpacing: '0.06em',
+            fontFamily: 'var(--font-heading)',
           }}>
             <span>Time</span>
             <span>Level</span>
@@ -193,16 +231,16 @@ export default function Logs() {
                   style={{
                     display: 'grid',
                     gridTemplateColumns: '80px 60px 1fr',
-                    padding: '5px 12px',
-                    borderBottom: '1px solid #f0f0f0',
+                    padding: '6px 16px',
+                    borderBottom: '1px solid var(--color-border-light)',
                     cursor: hasMeta ? 'pointer' : 'default',
-                    background: isExpanded ? '#f8f9fa' : 'transparent',
+                    background: isExpanded ? 'var(--color-bg)' : 'transparent',
                     transition: 'background 0.1s',
                   }}
-                  onMouseEnter={(e) => { if (!isExpanded) (e.currentTarget as HTMLDivElement).style.background = '#fafafa'; }}
+                  onMouseEnter={(e) => { if (!isExpanded) (e.currentTarget as HTMLDivElement).style.background = 'var(--color-bg)'; }}
                   onMouseLeave={(e) => { if (!isExpanded) (e.currentTarget as HTMLDivElement).style.background = 'transparent'; }}
                 >
-                  <span style={{ color: '#999' }} title={formatDate(log.timestamp)}>
+                  <span style={{ color: 'var(--color-text-muted)' }} title={formatDate(log.timestamp)}>
                     {formatTime(log.timestamp)}
                   </span>
                   <span style={{
@@ -211,6 +249,7 @@ export default function Logs() {
                     textTransform: 'uppercase',
                     fontSize: 10,
                     lineHeight: '18px',
+                    fontFamily: 'var(--font-heading)',
                   }}>
                     {log.level}
                   </span>
@@ -223,20 +262,20 @@ export default function Logs() {
                   }}>
                     {log.message}
                     {hasMeta && !isExpanded && (
-                      <span style={{ color: '#ccc', marginLeft: 8 }}> +meta</span>
+                      <span style={{ color: 'var(--color-text-muted)', marginLeft: 8 }}> +meta</span>
                     )}
                   </span>
                 </div>
                 {isExpanded && hasMeta && (
                   <div style={{
-                    padding: '8px 12px 8px 152px',
-                    background: '#f8f9fa',
-                    borderBottom: '1px solid #eee',
+                    padding: '10px 16px 10px 156px',
+                    background: 'var(--color-bg)',
+                    borderBottom: '1px solid var(--color-border-light)',
                   }}>
                     <pre style={{
                       margin: 0,
                       fontSize: 11,
-                      color: '#555',
+                      color: 'var(--color-text-secondary)',
                       whiteSpace: 'pre-wrap',
                       wordBreak: 'break-all',
                     }}>
@@ -252,26 +291,32 @@ export default function Logs() {
 
       {/* Pagination */}
       {totalPages > 1 && (
-        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 16, alignItems: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', gap: 8, marginTop: 20, alignItems: 'center' }}>
           <button
             onClick={() => setPage(p => Math.max(0, p - 1))}
             disabled={page === 0}
             style={{
-              padding: '4px 12px', border: '1px solid #ddd', borderRadius: 4,
-              background: '#fff', cursor: page === 0 ? 'not-allowed' : 'pointer', fontSize: 13,
+              padding: '6px 14px', border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-surface)', cursor: page === 0 ? 'not-allowed' : 'pointer',
+              fontSize: 12, transition: 'all var(--transition)',
+              opacity: page === 0 ? 0.5 : 1,
             }}
           >
             Previous
           </button>
-          <span style={{ fontSize: 13, color: '#666' }}>
+          <span style={{ fontSize: 12, color: 'var(--color-text-secondary)' }}>
             Page {page + 1} of {totalPages}
           </span>
           <button
             onClick={() => setPage(p => Math.min(totalPages - 1, p + 1))}
             disabled={page >= totalPages - 1}
             style={{
-              padding: '4px 12px', border: '1px solid #ddd', borderRadius: 4,
-              background: '#fff', cursor: page >= totalPages - 1 ? 'not-allowed' : 'pointer', fontSize: 13,
+              padding: '6px 14px', border: '1px solid var(--color-border)',
+              borderRadius: 'var(--radius-md)',
+              background: 'var(--color-surface)', cursor: page >= totalPages - 1 ? 'not-allowed' : 'pointer',
+              fontSize: 12, transition: 'all var(--transition)',
+              opacity: page >= totalPages - 1 ? 0.5 : 1,
             }}
           >
             Next

@@ -1,49 +1,82 @@
 import { Link } from 'react-router-dom';
 import { Brand } from '../api/client';
 
-const STATUS_COLORS: Record<string, string> = {
-  pending: '#f0ad4e',
-  extracting: '#5bc0de',
-  extracted: '#5bc0de',
-  generating_templates: '#5bc0de',
-  ready: '#5cb85c',
-  failed: '#d9534f',
+const STATUS_CONFIG: Record<string, { bg: string; color: string; label: string }> = {
+  pending: { bg: 'var(--color-warning-soft)', color: 'var(--color-warning)', label: 'Pending' },
+  extracting: { bg: 'var(--color-info-soft)', color: 'var(--color-info)', label: 'Extracting' },
+  extracted: { bg: 'var(--color-info-soft)', color: 'var(--color-info)', label: 'Extracted' },
+  awaiting_review: { bg: 'var(--color-accent-soft)', color: 'var(--color-accent)', label: 'Review' },
+  generating_templates: { bg: 'var(--color-info-soft)', color: 'var(--color-info)', label: 'Generating' },
+  ready: { bg: 'var(--color-success-soft)', color: 'var(--color-success)', label: 'Ready' },
+  failed: { bg: 'var(--color-danger-soft)', color: 'var(--color-danger)', label: 'Failed' },
 };
 
 export default function BrandCard({ brand }: { brand: Brand }) {
+  const status = STATUS_CONFIG[brand.status] || { bg: '#f1f5f9', color: '#64748b', label: brand.status };
+
   return (
     <Link
       to={`/brands/${brand.slug}`}
       style={{
         display: 'block',
-        background: '#fff',
-        borderRadius: 8,
-        padding: 20,
+        background: 'var(--color-surface)',
+        borderRadius: 'var(--radius-lg)',
+        padding: 24,
         textDecoration: 'none',
         color: 'inherit',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-        transition: 'box-shadow 0.2s',
+        boxShadow: 'var(--shadow-sm)',
+        border: '1px solid var(--color-border)',
+        transition: 'all var(--transition)',
+      }}
+      onMouseEnter={e => {
+        e.currentTarget.style.boxShadow = 'var(--shadow-lg)';
+        e.currentTarget.style.borderColor = 'var(--color-accent)';
+        e.currentTarget.style.transform = 'translateY(-2px)';
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.boxShadow = 'var(--shadow-sm)';
+        e.currentTarget.style.borderColor = 'var(--color-border)';
+        e.currentTarget.style.transform = 'translateY(0)';
       }}
     >
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
-        <h3 style={{ margin: 0 }}>{brand.name}</h3>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 12 }}>
+        <div style={{
+          width: 40, height: 40, borderRadius: 'var(--radius-md)',
+          background: 'var(--color-primary)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          fontFamily: 'var(--font-heading)', fontWeight: 700, fontSize: 16, color: 'var(--color-accent)',
+        }}>
+          {brand.name.substring(0, 2).toUpperCase()}
+        </div>
         <span style={{
-          background: STATUS_COLORS[brand.status] || '#999',
-          color: '#fff',
-          padding: '2px 8px',
-          borderRadius: 4,
-          fontSize: 12,
+          background: status.bg,
+          color: status.color,
+          padding: '3px 10px',
+          borderRadius: 20,
+          fontSize: 11,
           fontWeight: 600,
-        }}>{brand.status}</span>
+          letterSpacing: '0.02em',
+        }}>
+          {status.label}
+        </span>
       </div>
-      <div style={{ color: '#666', fontSize: 14 }}>
-        <span>/{brand.slug}</span>
+
+      <h3 style={{ fontSize: 17, fontWeight: 600, margin: '0 0 4px', fontFamily: 'var(--font-heading)' }}>
+        {brand.name}
+      </h3>
+      <div style={{ color: 'var(--color-text-secondary)', fontSize: 13, marginBottom: 12 }}>
+        /{brand.slug}
+      </div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px solid var(--color-border-light)' }}>
+        <span style={{ color: 'var(--color-text-muted)', fontSize: 12 }}>
+          {new Date(brand.created_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+        </span>
         {brand.document_count !== undefined && (
-          <span style={{ marginLeft: 12 }}>{brand.document_count} documents</span>
+          <span style={{ color: 'var(--color-text-secondary)', fontSize: 12, fontWeight: 500 }}>
+            {brand.document_count} {brand.document_count === 1 ? 'document' : 'documents'}
+          </span>
         )}
-      </div>
-      <div style={{ color: '#999', fontSize: 12, marginTop: 4 }}>
-        {new Date(brand.created_at).toLocaleDateString()}
       </div>
     </Link>
   );

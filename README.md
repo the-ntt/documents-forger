@@ -1,12 +1,12 @@
-# BrandForge
+# Documents Forger
 
 A brand report generation system that extracts design systems from websites and PDFs using AI, generates branded HTML templates, and renders markdown content into professionally styled PDF and Word documents.
 
 ## What It Does
 
-1. **Brand Extraction** - Point BrandForge at a website URL or upload a PDF. It uses Google Gemini AI to analyze colors, fonts, spacing, and visual identity, then generates a complete design system.
+1. **Brand Extraction** - Point Documents Forger at a website URL or upload a PDF. It uses Google Gemini AI to analyze colors, fonts, spacing, and visual identity, then generates a complete design system.
 2. **Template Generation** - From the design system, it auto-generates branded report and slides HTML templates.
-3. **Document Rendering** - Paste or upload your content (Markdown, Word, PDF, PowerPoint) and BrandForge renders it into a branded PDF or Word document using your templates.
+3. **Document Rendering** - Paste or upload your content (Markdown, Word, PDF, PowerPoint) and Documents Forger renders it into a branded PDF or Word document using your templates.
 4. **Interactive Review** - After extraction, review the design system, chat with AI to refine it, then approve to generate templates.
 5. **Inline Editing** - Edit generated documents directly in the browser, then re-render and download.
 
@@ -105,7 +105,7 @@ You're ready to go.
 2. Enter a name (e.g., "Acme Corp") and a slug (e.g., "acme-corp")
 3. Add one or more website URLs, or upload PDF brand guidelines
 4. Click **"Create Brand"**
-5. Watch the progress log as BrandForge extracts the design system
+5. Watch the progress log as Documents Forger extracts the design system
 6. Review the design system preview — click **"Looks Good"** to generate templates, or **"I Want to Modify"** to chat with AI and refine it
 
 ### Generate a Document
@@ -220,7 +220,7 @@ This project includes a `CLAUDE.md` file that gives [Claude Code](https://claude
 → Check your `.env` file has a valid `GEMINI_API_KEY`. Get one at https://aistudio.google.com/apikey.
 
 **"Maximum number of redirects exceeded" when extracting a brand**
-→ Some websites have redirect loops. BrandForge automatically falls back to headless Chrome (Puppeteer) for these. If it still fails, the website may be blocking automated access entirely — try uploading a PDF of the brand guidelines instead.
+→ Some websites have redirect loops. Documents Forger automatically falls back to headless Chrome (Puppeteer) for these. If it still fails, the website may be blocking automated access entirely — try uploading a PDF of the brand guidelines instead.
 
 **Brand stuck in "extracting" or "generating_templates"**
 → Check the Logs page (`/logs`) for errors. You can also check container logs: `docker compose -f docker/docker-compose.yml logs -f app`.

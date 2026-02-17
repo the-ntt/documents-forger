@@ -4,11 +4,11 @@ export default function DesignSystemPreview({ brandSlug, assetType }: { brandSlu
   const url = api.getAssetUrl(brandSlug, assetType);
 
   return (
-    <div style={{ border: '1px solid #ddd', borderRadius: 4, overflow: 'hidden', background: '#fff' }}>
+    <div style={{ background: '#fff' }}>
       <iframe
         src={url}
         title={assetType}
-        style={{ width: '100%', height: 500, border: 'none' }}
+        style={{ width: '100%', height: 500, border: 'none', display: 'block' }}
         sandbox="allow-same-origin"
       />
     </div>
