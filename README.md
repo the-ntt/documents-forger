@@ -36,8 +36,8 @@ That's it. Docker handles everything else.
 ### 1. Clone the repo
 
 ```bash
-git clone https://github.com/the-ntt/brandforge.git
-cd brandforge
+git clone https://github.com/the-ntt/documents-forger.git
+cd documents-forger
 ```
 
 ### 2. Create your environment file
