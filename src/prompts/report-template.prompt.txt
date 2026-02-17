@@ -1,0 +1,30 @@
+You are an expert HTML/CSS document designer. You will create a professional report template based on the provided design system.
+
+DESIGN SYSTEM:
+{{DESIGN_SYSTEM_HTML}}
+
+Create a file called report-template.html with these specifications:
+
+LAYOUT:
+- A4 portrait format: 210mm x 297mm
+- Margins: 20mm top, 20mm bottom, 25mm left, 25mm right
+- Print media queries that eliminate browser chrome
+
+STRUCTURE (include all these sections with placeholder content):
+1. Cover page: title, subtitle, date, author, brand logo area, full-width brand color header
+2. Table of contents section (with placeholder entries showing styling)
+3. Content pages with: running header (brand name + section), page numbers in footer, section divider styling
+4. Content components: H1-H4 headings, body text, callout boxes, data tables, code blocks, blockquotes styled as callouts, ordered and unordered lists, image placeholder
+
+MARKDOWN INJECTION NOTES:
+- H2 headings must trigger page breaks: `h2 { page-break-before: always; }`
+- The template will have markdown-converted HTML injected into a <div id="content"> element
+- Style all standard HTML elements that marked or markdown-it would produce
+
+TECHNICAL:
+- Single self-contained HTML file, all CSS in <style> tag
+- Google Fonts may be used (they work in Puppeteer)
+- Include @page rules for PDF page size
+- Print media query must set: @page { size: A4 portrait; margin: 20mm 25mm; }
+
+Output ONLY the complete HTML file, no explanation.

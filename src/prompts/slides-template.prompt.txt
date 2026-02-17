@@ -1,0 +1,29 @@
+You are an expert HTML/CSS presentation designer. Create a slide deck template based on the provided design system.
+
+DESIGN SYSTEM:
+{{DESIGN_SYSTEM_HTML}}
+
+Create slides-template.html with these specifications:
+
+LAYOUT:
+- 16:9 landscape: 254mm x 143mm per slide
+- Each <section class="slide"> is one slide
+- CSS page-break-after: always on each slide
+
+INCLUDE THESE SLIDE TYPES (as example slides in the template):
+1. Title slide: large centered title, subtitle, date, brand logo, full brand color background
+2. Section divider slide: bold section title, accent color background
+3. Content slide with bullets: slide title top, bulleted content, slide number, brand header/footer strip
+4. Two-column slide: title + two content columns
+5. Code/diagram slide: dark background version, monospace code block
+6. Data table slide: styled table with brand colors
+7. Closing slide: CTA or thank you, brand colors
+
+TECHNICAL:
+- Single self-contained HTML file
+- @page { size: 254mm 143mm landscape; margin: 0; }
+- Each section: width: 254mm; height: 143mm; overflow: hidden; position: relative;
+- Slide number bottom-right on each slide
+- Fonts: use same fonts as design system
+
+Output ONLY the complete HTML file, no explanation.

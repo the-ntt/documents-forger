@@ -1,0 +1,9 @@
+node_modules/
+dist/
+data/
+.env
+src/ui/dist/
+src/ui/node_modules/
+public/
+*.log
+.claude/
