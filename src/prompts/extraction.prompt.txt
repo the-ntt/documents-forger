@@ -16,9 +16,12 @@ Then create a single self-contained design-system.html file that displays all ex
 
 CRITICAL REQUIREMENTS:
 - The output must be a SINGLE complete HTML file with ALL CSS inline in a <style> tag
-- No external dependencies whatsoever
-- Must be openable in a browser with no internet connection
+- NEVER embed fonts as base64 data URIs — they are too large and will break the output
+- For fonts, use Google Fonts CDN links (e.g., <link href="https://fonts.googleapis.com/css2?family=..."> in the <head>) or use system font fallbacks (e.g., font-family: 'League Spartan', sans-serif)
+- NEVER include binary data, base64-encoded files, or data URIs for fonts/images
+- No JavaScript
 - Start your response with <!DOCTYPE html> and end with </html>
+- The HTML must be complete and valid — every opened tag must be properly closed
 - Do not include any explanation before or after the HTML
 
 Website content to analyze:

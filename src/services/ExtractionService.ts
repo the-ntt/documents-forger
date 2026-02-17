@@ -289,6 +289,23 @@ If no changes are needed (e.g., the user is asking a question), just respond wit
         const htmlEndIdx = text.lastIndexOf('</html>');
         if (doctypeIdx >= 0 && htmlEndIdx >= 0) {
           text = text.substring(doctypeIdx, htmlEndIdx + '</html>'.length);
+        } else if (doctypeIdx >= 0) {
+          // HTML was truncated (missing </html>) — try to repair it
+          logger.warn('Gemini response HTML is truncated (missing </html>), attempting repair');
+          text = text.substring(doctypeIdx);
+
+          // Strip any base64 data URI garbage (font/image data that caused truncation)
+          text = text.replace(/url\(data:[^)]{1000,}\)/g, 'url()');
+
+          // Close any open tags
+          if (!text.includes('</style>')) text += '\n</style>';
+          if (!text.includes('</body>')) text += '\n</body>';
+          if (!text.includes('</html>')) text += '\n</html>';
+        }
+
+        // Validate minimum structure
+        if (!text.includes('<html') || !text.includes('</html>')) {
+          throw new Error('Gemini response is not valid HTML — missing <html> structure');
         }
 
         return text;
